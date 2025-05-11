@@ -1,41 +1,37 @@
 import java.util.Scanner;
 
 /**
- * Main class - Entry point for the Online Bookstore application
- * Contains the CustomerMenu functionality and the application startup code
+ * Main - Entry point for the Online Bookstore application
+ * Initializes the store and starts the customer interface
  */
 public class Main {
     
     public static void main(String[] args) {
         System.out.println("=== Starting Online Bookstore System ===");
         
-        // Initialize the bookstore with capacity for orders and books
-        OnlineBookstore bookstore = new OnlineBookstore(100, 50);
-        
-        // Add sample books to the catalog
+        OnlineBookstore store = new OnlineBookstore(100, 50);
         System.out.println("Loading book catalog...");
-        populateBookstore(bookstore);
+        addSampleBooks(store);
         
-        // Start the customer menu
         System.out.println("Starting customer interface...");
-        CustomerMenu customerMenu = new CustomerMenu(bookstore);
+        CustomerMenu customerMenu = new CustomerMenu(store);
         customerMenu.start();
     }
     
     /**
-     * Populate the bookstore with sample books
+     * Populates the store with initial book inventory
      */
-    private static void populateBookstore(OnlineBookstore bookstore) {
-        bookstore.addBookToCatalog(new Book("Java Programming", "John Smith", "123456789", 29.99));
-        bookstore.addBookToCatalog(new Book("Data Structures", "Alice Johnson", "987654321", 39.99));
-        bookstore.addBookToCatalog(new Book("Algorithms", "Bob Brown", "456789123", 49.99));
-        bookstore.addBookToCatalog(new Book("Python Basics", "Emma Davis", "789123456", 19.99));
-        bookstore.addBookToCatalog(new Book("Web Development", "Tom Wilson", "654321987", 34.99));
-        bookstore.addBookToCatalog(new Book("Database Systems", "Sarah Miller", "321654987", 44.99));
-        bookstore.addBookToCatalog(new Book("Operating Systems", "James Taylor", "147258369", 54.99));
-        bookstore.addBookToCatalog(new Book("Machine Learning", "Jennifer White", "963852741", 59.99));
+    private static void addSampleBooks(OnlineBookstore store) {
+        store.addBookToCatalog(new Book("Java Programming", "John Smith", "123456789", 29.99));
+        store.addBookToCatalog(new Book("Data Structures", "Alice Johnson", "987654321", 39.99));
+        store.addBookToCatalog(new Book("Algorithms", "Bob Brown", "456789123", 49.99));
+        store.addBookToCatalog(new Book("Python Basics", "Emma Davis", "789123456", 19.99));
+        store.addBookToCatalog(new Book("Web Development", "Tom Wilson", "654321987", 34.99));
+        store.addBookToCatalog(new Book("Database Systems", "Sarah Miller", "321654987", 44.99));
+        store.addBookToCatalog(new Book("Operating Systems", "James Taylor", "147258369", 54.99));
+        store.addBookToCatalog(new Book("Machine Learning", "Jennifer White", "963852741", 59.99));
         
-        System.out.println("Book catalog loaded with " + bookstore.getBookCount() + " books.");
+        System.out.println("Loaded " + store.getBookCount() + " books into catalog.");
     }
     
     /**
@@ -49,13 +45,13 @@ public class Main {
         private Book[] shoppingCart;
         private int[] cartQuantities;
         private int cartItemCount;
-        private static final int MAX_CART_ITEMS = 20;
+        private static final int MAXIMUM_ITEMS_IN_CART = 20;
     
         public CustomerMenu(OnlineBookstore bookstore) {
             this.bookstore = bookstore;
             this.scanner = new Scanner(System.in);
-            this.shoppingCart = new Book[MAX_CART_ITEMS];
-            this.cartQuantities = new int[MAX_CART_ITEMS];
+            this.shoppingCart = new Book[MAXIMUM_ITEMS_IN_CART];
+            this.cartQuantities = new int[MAXIMUM_ITEMS_IN_CART];
             this.cartItemCount = 0;
         }
     
@@ -202,7 +198,7 @@ public class Main {
             }
             
             // If book not in cart, add it
-            if (this.cartItemCount < MAX_CART_ITEMS) {
+            if (this.cartItemCount < MAXIMUM_ITEMS_IN_CART) {
                 this.shoppingCart[this.cartItemCount] = book;
                 this.cartQuantities[this.cartItemCount] = quantity;
                 this.cartItemCount++;
@@ -276,7 +272,7 @@ public class Main {
                 return;
             }
             
-            Order order = new Order(this.customerName, this.shippingAddress, MAX_CART_ITEMS);
+            Order order = new Order(this.customerName, this.shippingAddress, MAXIMUM_ITEMS_IN_CART);
             
             for (int i = 0; i < this.cartItemCount; i++) {
                 order.addBook(this.shoppingCart[i], this.cartQuantities[i]);
